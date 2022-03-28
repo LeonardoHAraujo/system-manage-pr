@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+      <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Situação</th>
+          <th>Perfil</th>
+          <th>Reativar</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for user in users %}
+          {% if user.is_active == 0 %}
+            <tr>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                {% if user.is_active == 1 %}
+                    <span style="color: black" class="alert alert-success color-span">Ativo</span>
+                {% else %}
+                    <span style="color: black" class="alert alert-dark color-span">Inativo</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.is_admin == 1 %}
+                    <span style="color: black" class="alert alert-info color-span">Admin</span>
+                {% else %}
+                    <span style="color: black" class="alert alert-dark color-span">Comum</span>
+                {% endif %}
+              </td>
+              <td>
+                <button type="submit" class="btn btn-success waves-effect waves-light" btn-reactivate data-id="{{ user.id }}">
+                  <i class="fas fa-users"></i>
+                </button>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+  <script src="assets/js/custom/users.js"></script>
+{% endblock %}
+

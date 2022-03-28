@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex;justify-content: end;margin-bottom: 15px;" class="div-btn-create">
+    <button class="btn btn-info" id="create"><i class="fas fa-plus"></i></button>
+</div>
+
+<table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+      <tr>
+          <th>Autor do PR</th>
+          <th>Revisor do PR</th>
+          <th>Link do PR</th>
+          <th>Situação do PR</th>
+          <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for pr in prs %}
+        <tr>
+          <td>{{ pr.author }}</td>
+          <td>{{ pr.revisor }}</td>
+          <td>{{ pr.link }}</td>
+          <td>
+            {% if pr.status == 0 %}
+                <span style="color: black" class="alert alert-info color-span">À revisar</span>
+            {% elif pr.status == 1 %}
+                <span style="color: black" class="alert alert-warning color-span">Pendente</span>
+            {% elif pr.status == 2 %}
+                <span style="color: black" class="alert alert-success color-span">Aprovado</span>
+            {% endif %}
+          </td>
+          <td>
+            <button
+              btn-edit
+              data-id="{{ pr.id }}"
+              data-autor="{{ pr.author }}"
+              data-revisor="{{ pr.revisor }}"
+              data-link="{{ pr.link }}"
+              data-situacao="{{ pr.status }}"
+              class="btn btn-warning"
+            >
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+
+            <button
+              btn-delete
+              data-id="{{ pr.id }}"
+              type="submit"
+              class="btn btn-danger"
+            >
+                <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+<!-- MODAL FORM -->
+<div class="modal fade" role="dialog" id="modal">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <form id="form-modal" action="" method="post">
+            <div class="modal-content">
+
+                <!-- Data id -->
+                <input type="hidden" value="" id="id">
+
+                <!-- Modal Header  -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="id-title-modal"></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Message Alert validate -->
+                <div class="alert hide" id="alert-message">
+                    <!-- message dynamic here -->
+                </div>
+
+                <!-- Modal Body  -->
+                <div class="modal-body">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="name">Autor do PR</label>
+                        <input type="text" id="autor" class="form-control" placeholder="Autor...">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="name">Revisor do PR</label>
+                        <input type="text" id="revisor" class="form-control" placeholder="Revisor...">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="office">Link</label>
+                        <input type="text" id="link" class="form-control" placeholder="Link...">
+                    </div>
+                    <div style="display: flex;flex-direction: column" class="form-group mx-sm-3 mb-2 align-checkbox">
+                        <label for="func">Situação do PR</label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" value="0" id="flexRadioDefault1">
+                          <label class="form-check-label" for="flexRadioDefault1">
+                            À revisar
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" value="1" id="flexRadioDefault2">
+                          <label class="form-check-label" for="flexRadioDefault2">
+                            Pendente
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" value="2" id="flexRadioDefault3">
+                          <label class="form-check-label" for="flexRadioDefault3">
+                            Aprovado
+                          </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer  -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button style="background-color: rgba(250,163,0,1);border-color: rgba(250,163,0,1);" type="submit" class="btn btn-primary" id="confirm">Confirmar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="assets/js/custom/pullRequests.js"></script>
+{% endblock %}
